@@ -1,0 +1,18 @@
+{
+  "input": "What is the weather in Paris?",
+  "restResponses": { "get_current": { "tempC": 21, "summary": "clear" } },
+  "llm": {
+    "supervisor": [
+      { "toolCalls": [{ "id": "d1", "name": "delegate_weather", "arguments": { "input": "weather in Paris" } }] },
+      { "text": "It is 21C and clear in Paris." }
+    ],
+    "weather": [
+      { "toolCalls": [{ "id": "a1", "name": "get_current", "arguments": { "city": "Paris" } }] },
+      { "text": "21C and clear." }
+    ]
+  },
+  "expect": {
+    "text": "It is 21C and clear in Paris.",
+    "delegations": [{ "agent": "weather", "result": "21C and clear." }]
+  }
+}
