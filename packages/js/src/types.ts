@@ -21,7 +21,24 @@ export const RestConnection = z.object({
   operations: z.array(RestOperation),
 });
 
-export const Connection = z.discriminatedUnion("type", [RestConnection]);
+export const McpStdioConnection = z.object({
+  type: z.literal("mcp-stdio"),
+  command: z.string(),
+  args: z.array(z.string()).default([]),
+  env: z.record(z.string()).optional(),
+});
+
+export const McpHttpConnection = z.object({
+  type: z.literal("mcp-http"),
+  url: z.string(),
+  headers: z.record(z.string()).optional(),
+});
+
+export const Connection = z.discriminatedUnion("type", [
+  RestConnection,
+  McpStdioConnection,
+  McpHttpConnection,
+]);
 
 export const AgentConfig = z.object({
   name: z.string().min(1),
@@ -34,9 +51,13 @@ export const AgentConfig = z.object({
 export const BrainConfigSchema = z.object({
   model: z.string(),
   agents: z.array(AgentConfig).default([]),
+  /** Persistent knowledge graph: a path makes the brain's memory survive across runs. */
+  knowledge: z.object({ path: z.string().optional() }).optional(),
 });
 
 export type BrainConfig = z.infer<typeof BrainConfigSchema>;
 export type AgentConfigT = z.infer<typeof AgentConfig>;
 export type ConnectionT = z.infer<typeof Connection>;
 export type RestOperationT = z.infer<typeof RestOperation>;
+export type McpStdioConnectionT = z.infer<typeof McpStdioConnection>;
+export type McpHttpConnectionT = z.infer<typeof McpHttpConnection>;

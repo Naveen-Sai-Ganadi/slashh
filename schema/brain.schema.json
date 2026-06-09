@@ -120,6 +120,59 @@
                         "operations"
                       ],
                       "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "mcp-stdio"
+                        },
+                        "command": {
+                          "type": "string"
+                        },
+                        "args": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "default": []
+                        },
+                        "env": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "command"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "mcp-http"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "headers": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "url"
+                      ],
+                      "additionalProperties": false
                     }
                   ]
                 },
@@ -134,6 +187,15 @@
             "additionalProperties": false
           },
           "default": []
+        },
+        "knowledge": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
         }
       },
       "required": [
