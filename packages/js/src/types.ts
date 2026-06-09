@@ -51,6 +51,8 @@ export const AgentConfig = z.object({
 export const BrainConfigSchema = z.object({
   model: z.string(),
   agents: z.array(AgentConfig).default([]),
+  /** Persistent knowledge graph: a path makes the brain's memory survive across runs. */
+  knowledge: z.object({ path: z.string().optional() }).optional(),
 });
 
 export type BrainConfig = z.infer<typeof BrainConfigSchema>;

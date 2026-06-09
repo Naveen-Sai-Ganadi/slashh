@@ -187,6 +187,15 @@
             "additionalProperties": false
           },
           "default": []
+        },
+        "knowledge": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
         }
       },
       "required": [
