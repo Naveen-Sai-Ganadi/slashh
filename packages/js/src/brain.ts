@@ -3,6 +3,7 @@ import { BrainConfigSchema, type BrainConfig, type AgentConfigT } from "./types.
 import type { LLM, LLMMessage } from "./llm/interface.js";
 import type { Tool } from "./tool.js";
 import { buildRestTools } from "./connections/rest.js";
+import { openMcpStdio, openMcpHttp } from "./connections/mcp.js";
 import { runAgent } from "./agent.js";
 
 export interface BrainRunOptions {
@@ -44,12 +45,40 @@ export class Brain {
     return BrainConfigSchema.parse({ model: this.model, agents: this.agents });
   }
 
-  private buildAgentTools(agent: AgentConfigT, opts: BrainRunOptions): Tool[] {
+  /**
+   * Open every connection for an agent and return its callable tools plus a
+   * closer that releases all stateful connections (MCP clients/subprocesses).
+   * REST connections are stateless, so their closer is a no-op.
+   */
+  private async openAgentTools(
+    agent: AgentConfigT,
+    opts: BrainRunOptions
+  ): Promise<{ tools: Tool[]; close: () => Promise<void> }> {
     const tools: Tool[] = [];
+    const closers: Array<() => Promise<void>> = [];
     for (const conn of agent.connections) {
-      if (conn.type === "rest") tools.push(...buildRestTools(conn, { env: opts.env, fetch: opts.fetch }));
+      if (conn.type === "rest") {
+        tools.push(...buildRestTools(conn, { env: opts.env, fetch: opts.fetch }));
+      } else if (conn.type === "mcp-stdio") {
+        const opened = await openMcpStdio(conn, { env: opts.env });
+        tools.push(...opened.tools);
+        closers.push(opened.close);
+      } else if (conn.type === "mcp-http") {
+        const opened = await openMcpHttp(conn, { env: opts.env });
+        tools.push(...opened.tools);
+        closers.push(opened.close);
+      }
     }
-    return tools;
+    const close = async () => {
+      for (const c of closers) {
+        try {
+          await c();
+        } catch {
+          /* best-effort cleanup */
+        }
+      }
+    };
+    return { tools, close };
   }
 
   async run(input: string, opts: BrainRunOptions = {}): Promise<BrainRunResult> {
@@ -70,15 +99,19 @@ export class Brain {
       description: `Delegate to ${agent.name}: ${agent.description}`,
       inputSchema: { type: "object", properties: { input: { type: "string" } }, required: ["input"] },
       invoke: async (args) => {
-        const agentTools = this.buildAgentTools(agent, opts);
-        const result = await runAgent({
-          agent,
-          input: String(args.input ?? ""),
-          llm: llmFor!(agent.name),
-          tools: agentTools,
-        });
-        delegations.push({ agent: agent.name, result: result.text });
-        return { result: result.text };
+        const { tools: agentTools, close } = await this.openAgentTools(agent, opts);
+        try {
+          const result = await runAgent({
+            agent,
+            input: String(args.input ?? ""),
+            llm: llmFor!(agent.name),
+            tools: agentTools,
+          });
+          delegations.push({ agent: agent.name, result: result.text });
+          return { result: result.text };
+        } finally {
+          await close();
+        }
       },
     }));
 
