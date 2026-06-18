@@ -1,0 +1,20 @@
+{
+  "model": "mock",
+  "agents": [
+    {
+      "name": "weather",
+      "description": "Weather specialist",
+      "instructions": "Answer weather questions using your tools.",
+      "connections": [
+        {
+          "type": "rest",
+          "baseUrl": "https://api.example.com",
+          "operations": [
+            { "name": "get_current", "method": "GET", "path": "/current", "description": "Current weather",
+              "input": { "type": "object", "properties": { "city": { "type": "string" } }, "required": ["city"] } }
+          ]
+        }
+      ]
+    }
+  ]
+}
