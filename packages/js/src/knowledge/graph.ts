@@ -160,6 +160,16 @@ export class KnowledgeGraph {
     return this.edges.filter((e) => e.provenance.includes(documentId));
   }
 
+  /** Insert an entity verbatim (used when loading from a persistent store). */
+  importEntity(entity: Entity): void {
+    this.entities.set(entity.id, entity);
+  }
+
+  /** Insert an edge verbatim, no supersession (used when loading from a store). */
+  importEdge(edge: Edge): void {
+    this.edges.push(edge);
+  }
+
   allEntities(): Entity[] {
     return [...this.entities.values()];
   }
