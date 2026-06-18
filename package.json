@@ -1,9 +1,0 @@
-{
-  "name": "company-brain-monorepo",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "test": "pnpm -r test",
-    "build": "pnpm -r build"
-  }
-}
