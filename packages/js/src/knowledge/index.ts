@@ -1,7 +1,12 @@
 /**
- * The bi-temporal, permission-aware knowledge layer.
- *
- * Phase 0 exports the data model. Subsequent phases add the graph, stores,
- * retrieval, extraction, and agent on top of these types.
+ * The bi-temporal, permission-aware knowledge layer — the foundation the eight
+ * surfaces and the agent build on.
  */
 export * from "./model.js";
+export * from "./graph.js";
+export * from "./embeddings.js";
+export * from "./stores.js";
+export * from "./extraction.js";
+export * from "./retrieval.js";
+export * from "./agent.js";
+export * from "./layer.js";
