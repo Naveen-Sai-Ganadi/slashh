@@ -6,7 +6,6 @@ import {
   edgeIsCurrent,
   type Edge,
 } from "../src/knowledge/model.js";
-import { NotImplementedError, buildProfile } from "../src/surfaces/index.js";
 
 describe("knowledge model", () => {
   it("stableId is deterministic and order-sensitive", () => {
@@ -60,13 +59,5 @@ describe("knowledge model", () => {
       expect(edgeIsCurrent(e, new Date("2026-03-01T00:00:00Z"))).toBe(false);
       expect(edgeIsCurrent(e, new Date("2026-01-15T00:00:00Z"))).toBe(true);
     });
-  });
-});
-
-describe("surfaces scaffold", () => {
-  it("stub surfaces throw NotImplementedError until their phase", async () => {
-    await expect(buildProfile(null, "x", { user: "bob" })).rejects.toBeInstanceOf(
-      NotImplementedError
-    );
   });
 });

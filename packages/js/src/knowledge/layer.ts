@@ -134,6 +134,9 @@ export class KnowledgeLayer {
   allEntities(): Entity[] {
     return this.graph.allEntities();
   }
+  allEdges(): Edge[] {
+    return this.graph.allEdges();
+  }
   stats() {
     return this.graph.stats();
   }
