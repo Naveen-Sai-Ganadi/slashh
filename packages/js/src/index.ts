@@ -10,3 +10,19 @@ export { ingestText, extractKnowledge } from "./graph/ingest.js";
 export type { Extraction, IngestResult } from "./graph/ingest.js";
 export { answerFromGraph } from "./graph/query.js";
 export type { KnowledgeAnswer } from "./graph/query.js";
+
+// Bi-temporal, permission-aware knowledge layer (the foundation for the surfaces).
+export * from "./knowledge/index.js";
+// The eight read-side knowledge surfaces.
+export * as surfaces from "./surfaces/index.js";
+export type {
+  TimelineItem,
+  EntityProfile,
+  GlossaryTerm,
+  Expert,
+  Contradiction,
+  DecisionRecord,
+  MeetingPacket,
+  EntityCard,
+  SurfaceContext,
+} from "./surfaces/types.js";

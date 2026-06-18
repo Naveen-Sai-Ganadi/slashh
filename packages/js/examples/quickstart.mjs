@@ -1,6 +1,6 @@
 // Hands-on demo of Company Brain — no API key needed (uses the deterministic MockLLM).
 // Run from packages/js:  node examples/quickstart.mjs
-import { Brain, KnowledgeGraph, MockLLM } from "company-brain";
+import { Brain, KnowledgeGraph, MockLLM } from "@company-brain/core";
 
 console.log("\n=== 1. Raw knowledge graph (no LLM) ===");
 const g = new KnowledgeGraph();
