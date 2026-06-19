@@ -15,6 +15,9 @@ export type { KnowledgeAnswer } from "./graph/query.js";
 export * from "./knowledge/index.js";
 // The eight read-side knowledge surfaces.
 export * as surfaces from "./surfaces/index.js";
+// Shared, framework-agnostic auth primitives (PKCE, claim mapping, Hosted-UI URLs).
+export * as auth from "./auth/index.js";
+export type { AuthIdentity, AuthClaims, CognitoPublicConfig, Pkce } from "./auth/index.js";
 export type {
   TimelineItem,
   EntityProfile,
