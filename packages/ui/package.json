@@ -1,0 +1,22 @@
+{
+  "name": "@company-brain/ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared UI for the company brain: design tokens (globals.css) + ThemeToggle. Single source of truth for both the marketing site and the app.",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./globals.css": "./globals.css"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.5.0"
+  }
+}
