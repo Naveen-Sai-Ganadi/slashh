@@ -15,7 +15,7 @@ interface BuildOpts {
   transport?: Transport;
 }
 
-const CLIENT_INFO = { name: "company-brain", version: "0.0.0" };
+const CLIENT_INFO = { name: "slashh", version: "0.0.0" };
 
 /** Wrap an already-connected MCP client's tools as invokable Brain tools. */
 async function wrapClientTools(client: Client): Promise<Tool[]> {

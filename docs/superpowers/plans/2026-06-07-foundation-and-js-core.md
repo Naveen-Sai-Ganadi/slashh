@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the monorepo foundation, the canonical config schema, and a working `company-brain` JS SDK with a supervisor→agent orchestration loop over REST connections, proven by a shared conformance harness.
+**Goal:** Build the monorepo foundation, the canonical config schema, and a working `slashh` JS SDK with a supervisor→agent orchestration loop over REST connections, proven by a shared conformance harness.
 
 **Architecture:** A pnpm monorepo. Zod schemas in the JS package are the single in-code source of truth; we emit `schema/brain.schema.json` from them (the cross-language contract the Python package will later consume). The SDK exposes one in-memory `Brain` model with two equal front doors (config file and code builder) that round-trips to config. A thin `LLM` interface drives the agents-as-tools supervisor loop, with a deterministic `MockLLM` making behavior testable. v1 ships one real connection type (REST); MCP lands in Plan 2.
 
@@ -13,7 +13,7 @@
 ## File Structure
 
 ```
-company-brain/
+slashh/
   package.json                      # root, pnpm workspace
   pnpm-workspace.yaml
   schema/
@@ -73,7 +73,7 @@ packages:
 `package.json`:
 ```json
 {
-  "name": "company-brain-monorepo",
+  "name": "slashh-monorepo",
   "private": true,
   "type": "module",
   "scripts": {
@@ -88,7 +88,7 @@ packages:
 `packages/js/package.json`:
 ```json
 {
-  "name": "company-brain",
+  "name": "slashh",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -158,7 +158,7 @@ describe("smoke", () => {
 
 - [ ] **Step 5: Install and run**
 
-Run: `pnpm install && pnpm --filter company-brain test`
+Run: `pnpm install && pnpm --filter slashh test`
 Expected: PASS, 1 test.
 
 - [ ] **Step 6: Commit**
@@ -214,7 +214,7 @@ describe("BrainConfigSchema", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test types`
+Run: `pnpm --filter slashh test types`
 Expected: FAIL ("Cannot find module ../src/types.js").
 
 - [ ] **Step 3: Implement the schemas**
@@ -267,7 +267,7 @@ export type RestOperationT = z.infer<typeof RestOperation>;
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test types`
+Run: `pnpm --filter slashh test types`
 Expected: PASS, 2 tests.
 
 - [ ] **Step 5: Implement schema emitter**
@@ -288,7 +288,7 @@ console.log("wrote", out);
 
 - [ ] **Step 6: Generate and verify the schema artifact**
 
-Run: `pnpm --filter company-brain emit-schema`
+Run: `pnpm --filter slashh emit-schema`
 Expected: prints `wrote .../schema/brain.schema.json`; file exists and contains `"BrainConfig"`.
 
 - [ ] **Step 7: Commit**
@@ -331,7 +331,7 @@ describe("resolveSecrets", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test secrets`
+Run: `pnpm --filter slashh test secrets`
 Expected: FAIL ("Cannot find module ../src/secrets.js").
 
 - [ ] **Step 3: Implement**
@@ -351,7 +351,7 @@ export function resolveSecrets(value: string, env: Record<string, string | undef
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test secrets`
+Run: `pnpm --filter slashh test secrets`
 Expected: PASS, 3 tests.
 
 - [ ] **Step 5: Commit**
@@ -401,7 +401,7 @@ describe("Brain config<->code", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test brain-config`
+Run: `pnpm --filter slashh test brain-config`
 Expected: FAIL ("Cannot find module ../src/brain.js").
 
 - [ ] **Step 3: Implement Brain (config + builder, no run yet)**
@@ -439,7 +439,7 @@ export class Brain {
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test brain-config`
+Run: `pnpm --filter slashh test brain-config`
 Expected: PASS, 3 tests.
 
 - [ ] **Step 5: Commit**
@@ -488,7 +488,7 @@ describe("MockLLM", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test mock-llm`
+Run: `pnpm --filter slashh test mock-llm`
 Expected: FAIL ("Cannot find module ../src/llm/mock.js").
 
 - [ ] **Step 3: Implement Tool, LLM interface, MockLLM**
@@ -557,7 +557,7 @@ export class MockLLM implements LLM {
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test mock-llm`
+Run: `pnpm --filter slashh test mock-llm`
 Expected: PASS, 2 tests.
 
 - [ ] **Step 5: Commit**
@@ -618,7 +618,7 @@ describe("buildRestTools", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test rest`
+Run: `pnpm --filter slashh test rest`
 Expected: FAIL ("Cannot find module ../src/connections/rest.js").
 
 - [ ] **Step 3: Implement**
@@ -671,7 +671,7 @@ export function buildRestTools(conn: RestConnectionInput, opts: BuildOpts = {}):
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test rest`
+Run: `pnpm --filter slashh test rest`
 Expected: PASS, 2 tests.
 
 - [ ] **Step 5: Commit**
@@ -723,7 +723,7 @@ describe("runAgent", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test agent`
+Run: `pnpm --filter slashh test agent`
 Expected: FAIL ("Cannot find module ../src/agent.js").
 
 - [ ] **Step 3: Implement the agent loop**
@@ -783,7 +783,7 @@ export async function runAgent(params: {
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test agent`
+Run: `pnpm --filter slashh test agent`
 Expected: PASS, 1 test.
 
 - [ ] **Step 5: Commit**
@@ -847,7 +847,7 @@ describe("Brain.run supervisor", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test supervisor`
+Run: `pnpm --filter slashh test supervisor`
 Expected: FAIL ("brain.run is not a function").
 
 - [ ] **Step 3: Implement supervisor in `brain.ts`**
@@ -939,12 +939,12 @@ export type { Tool } from "./tool.js";
 
 - [ ] **Step 5: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test supervisor`
+Run: `pnpm --filter slashh test supervisor`
 Expected: PASS, 1 test.
 
 - [ ] **Step 6: Build the package**
 
-Run: `pnpm --filter company-brain build`
+Run: `pnpm --filter slashh build`
 Expected: `dist/index.js` and `dist/index.d.ts` produced, no type errors.
 
 - [ ] **Step 7: Commit**
@@ -991,7 +991,7 @@ describe("ai-sdk mapping", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test ai-sdk`
+Run: `pnpm --filter slashh test ai-sdk`
 Expected: FAIL ("Cannot find module ../src/llm/ai-sdk.js").
 
 - [ ] **Step 3: Implement the adapter mapping + LLM**
@@ -1038,7 +1038,7 @@ export class AiSdkLLM implements LLM {
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test ai-sdk`
+Run: `pnpm --filter slashh test ai-sdk`
 Expected: PASS, 3 tests.
 
 - [ ] **Step 5: Default `llmFor` to the AI SDK adapter in `brain.ts`**
@@ -1061,7 +1061,7 @@ Then replace every later `opts.llmFor!(...)` / `opts.llmFor("...")` call inside 
 
 - [ ] **Step 6: Run the full suite + build**
 
-Run: `pnpm --filter company-brain test && pnpm --filter company-brain build`
+Run: `pnpm --filter slashh test && pnpm --filter slashh build`
 Expected: all tests PASS; build succeeds.
 
 - [ ] **Step 7: Commit**
@@ -1154,7 +1154,7 @@ describe("conformance fixtures", () => {
 
 - [ ] **Step 4: Run test to verify it fails**
 
-Run: `pnpm --filter company-brain test conformance`
+Run: `pnpm --filter slashh test conformance`
 Expected: FAIL ("Cannot find module ../src/conformance/run-fixtures.js").
 
 - [ ] **Step 5: Implement the fixture runner**
@@ -1204,12 +1204,12 @@ export async function runFixture(dir: string): Promise<{ actual: unknown; expect
 
 - [ ] **Step 6: Run test to verify it passes**
 
-Run: `pnpm --filter company-brain test conformance`
+Run: `pnpm --filter slashh test conformance`
 Expected: PASS, 1 fixture.
 
 - [ ] **Step 7: Run the entire suite**
 
-Run: `pnpm --filter company-brain test`
+Run: `pnpm --filter slashh test`
 Expected: all tests across every file PASS.
 
 - [ ] **Step 8: Commit**

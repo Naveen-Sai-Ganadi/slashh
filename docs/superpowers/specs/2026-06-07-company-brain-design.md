@@ -29,13 +29,13 @@ A monorepo where a **language-neutral JSON Schema is the contract**, two SDKs im
 it, and shared fixtures keep them honest.
 
 ```
-company-brain/
+slashh/
   schema/
     brain.schema.json        # canonical config schema — the source of truth
   fixtures/                  # shared scenarios: config + scripted LLM/tool I/O -> expected trace
   packages/
-    js/                      # npm: "company-brain"
-    py/                      # pip/uv: "company-brain"
+    js/                      # npm: "slashh"
+    py/                      # pip/uv: "slashh"
   docs/superpowers/specs/    # this design
   app/                       # (later) clone-and-run localhost UI
 ```
@@ -96,7 +96,7 @@ errors mid-run returns an error result the supervisor can route around or report
 
 JavaScript:
 ```ts
-import { Brain } from "company-brain";
+import { Brain } from "slashh";
 
 const brain = Brain.fromConfig("brain.yaml");
 // or: new Brain({ model: "anthropic/claude-sonnet-4-6" }).addAgent({ ... })
