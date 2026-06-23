@@ -1,5 +1,5 @@
 {
-  "name": "@company-brain/core",
+  "name": "@slashh/core",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",

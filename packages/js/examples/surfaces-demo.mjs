@@ -1,13 +1,13 @@
 // Offline tour of the knowledge surfaces — no API key, no databases, no server.
 // Run from the repo root after building core:
-//   pnpm --filter @company-brain/core build && node package/packages/js/examples/surfaces-demo.mjs
+//   pnpm --filter @slashh/core build && node package/packages/js/examples/surfaces-demo.mjs
 import {
   KnowledgeLayer,
   KnowledgeGraph,
   entityKey,
   makeAcl,
   surfaces,
-} from "@company-brain/core";
+} from "@slashh/core";
 const { buildProfile, listDecisions, findContradictions, define } = surfaces;
 
 const layer = new KnowledgeLayer();
